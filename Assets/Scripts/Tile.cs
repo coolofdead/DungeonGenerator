@@ -9,25 +9,9 @@ public class Tile : MonoBehaviour, IPointerClickHandler, IWalkable
     public static OnPlayerTileClicked onPlayerTileClicked;
 
     public IMovableAlongPath MovableOnTile { get; private set; }
-    private IEnumerable<Tile> neighbours;
+    private IEnumerable<IWalkable> neighbours;
 
-    public virtual void OnMovableArrive(IMovableAlongPath movable)
-    {
-    }
-
-    public virtual void OnMovableStopOnIt(IMovableAlongPath movable)
-    {
-        (movable as MonoBehaviour).transform.SetParent(transform);
-        MovableOnTile = movable;
-    }
-
-    public virtual void OnMovableLeaveTile(IMovableAlongPath movable)
-    {
-        (movable as MonoBehaviour).transform.SetParent(null);
-        MovableOnTile = null;
-    }
-
-    public void SetNeighbours(IEnumerable<Tile> neighbours)
+    public void SetNeighbours(IEnumerable<IWalkable> neighbours)
     {
         this.neighbours = neighbours;
     }

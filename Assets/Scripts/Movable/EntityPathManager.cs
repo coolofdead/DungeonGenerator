@@ -13,8 +13,8 @@ public class EntityPathManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            var startCell = MapManager.Dungeon[Random.Range(0, MapManager.Dungeon.Tiles.Count)];
-            var endCell = MapManager.Dungeon[Random.Range(0, MapManager.Dungeon.Tiles.Count)];
+            var startCell = MapManager.Dungeon[Random.Range(0, MapManager.Dungeon.Cells.Count)];
+            var endCell = MapManager.Dungeon[Random.Range(0, MapManager.Dungeon.Cells.Count)];
 
             //print($"from {startCell.GetPosition()}");
             //print($"to {endCell.GetPosition()}");

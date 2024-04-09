@@ -3,24 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Dungeon : IEnumerable
+public class Dungeon : IDungeon
 {
-    public List<Cell> Tiles { get; protected set; } = new();
+    public List<Cell> Cells { get; protected set; } = new();
     public List<Room> Rooms { get; protected set; } = new();
-    public Vector2Int MapSize { get; private set; }
+    public Vector2Int MapSize { get; protected set; }
+
+    public IEnumerable<ICellable> GetCells() => Cells;
+    public Vector2Int GetSize() => MapSize;
 
     public Dungeon(Vector2Int mapSize)
     {
         MapSize = mapSize;
-        Tiles = new();
+        Cells = new();
         Rooms = new();
     }
 
-    public Cell this[int index] { get => Tiles[index]; set => Tiles[index] = value; }
+    public Cell this[int index] { get => Cells[index]; set => Cells[index] = value; }
 
     public void Add(Cell newCell)
     {
-        if (!Tiles.Any(cell => cell.pos.x == newCell.pos.x && cell.pos.y == newCell.pos.y)) Tiles.Add(newCell);
+        if (!Cells.Any(cell => cell.pos.x == newCell.pos.x && cell.pos.y == newCell.pos.y)) Cells.Add(newCell);
     }
 
     public void Add(Room room)
@@ -34,32 +37,35 @@ public class Dungeon : IEnumerable
 
     public bool HasAt(int x, int y)
     {
-        return Tiles.Any(tile => tile.pos.x == x && tile.pos.y == y);
+        return Cells.Any(cell => cell.pos.x == x && cell.pos.y == y);
     }
 
     public Cell TryGet(int x, int y)
     {
-        return Tiles.Where(tile => tile.pos.x == x && tile.pos.y == y).First();
+        return Cells.Where(cell => cell.pos.x == x && cell.pos.y == y).First();
     }
 
-    public IEnumerator GetEnumerator()
+    IEnumerator IEnumerable.GetEnumerator()
     {
-        foreach (var tile in Tiles)
+        foreach (var cell in Cells)
         {
-            yield return tile;
+            yield return cell;
         }
     }
 }
 
-public class Cell : IWalkable
+public class Cell : ICellable, IWalkable
 {
     public TileType tileType;
     public Vector2Int pos;
-    public IEnumerable<IWalkable> neighbours;
+    public IEnumerable<IWalkable> Neighbours;
 
-    public IEnumerable<IWalkable> GetNeighbours() => neighbours;
-    public Vector3 GetPosition() => new Vector3(pos.x, 0, pos.y);
-    public void SetNeighbours(IEnumerable<IWalkable> neighbours) => this.neighbours = neighbours;
+    public IEnumerable<IWalkable> GetNeighbours() => Neighbours;
+    public void SetNeighbours(IEnumerable<IWalkable> neighbours) => Neighbours = neighbours;
+
+    public Vector2Int GetDungeonPosition() => pos;
+    public Vector3 GetPosition() => GetWorldPosition();
+    public Vector3 GetWorldPosition() => new Vector3(pos.x, 0, pos.y);
 }
 
 public class Room

@@ -3,28 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
-using System.Reflection;
-using System.Drawing;
 
-public class DungeonGenerator : MonoBehaviour
+public class DungeonGenerator : MonoBehaviour, IDungeonGenerable
 {
     public bool showLogs = false;
+    public int seed;
 
     private System.Random rnd;
 
-    public Dungeon GenerateDungeon(MapGeneratorRules generationRules)
+    public IDungeon GenerateDungeon(IEnumerable<IDungeonRulabe> rules = null)
     {
-        Dungeon dungeon = new(generationRules.MapSize);
+        //Dungeon dungeon = new(rules.MapSize);
 
-        int seed = generationRules.seed == 0 ? UnityEngine.Random.Range(0, 9999) : generationRules.seed;
-        rnd = new System.Random(seed);
+        //int seed = this.seed == 0 ? UnityEngine.Random.Range(0, 9999) : this.seed;
+        //rnd = new System.Random(seed);
 
-        GenerateRooms(ref dungeon, ref generationRules);
-        ConnectRooms(ref dungeon, ref generationRules);
+        //GenerateRooms(ref dungeon, ref rules);
+        //ConnectRooms(ref dungeon, ref rules);
+        //SetTilesNeighbours(ref dungeon);
 
-        if (showLogs) print($"Total cells {dungeon.Tiles.Count}"); 
+        //if (showLogs) print($"Total cells {dungeon.Tiles.Count}");
 
-        return dungeon;
+        //return dungeon;
+
+        return null;
     }
 
     private void GenerateRooms(ref Dungeon dungeon, ref MapGeneratorRules generationRules)
@@ -65,14 +67,14 @@ public class DungeonGenerator : MonoBehaviour
 
     private Vector2Int GetRandomPointWithDistance(ref Dungeon dungeon, int distance)
     {
-        // Choix aléatoire d'un point dans la liste
-        var randomPoint = dungeon.Tiles[rnd.Next(0, dungeon.Tiles.Count - 1)];
+        // Choix al?atoire d'un point dans la liste
+        var randomPoint = dungeon.Cells[rnd.Next(0, dungeon.Cells.Count - 1)];
         Vector2Int newPoint = Vector2Int.RoundToInt(randomPoint.pos + distance * new Vector2((float)((rnd.NextDouble() * 2.0) - 1.0), (float)((rnd.NextDouble() * 2.0) - 1.0)));
 
-        if (dungeon.Tiles.All(cell => Vector2Int.Distance(newPoint, cell.pos) > distance))
+        if (dungeon.Cells.All(cell => Vector2Int.Distance(newPoint, cell.pos) > distance))
             return newPoint;
         else
-            return GetRandomPointWithDistance(ref dungeon, distance); // Réessayer avec un nouveau point
+            return GetRandomPointWithDistance(ref dungeon, distance); // R?essayer avec un nouveau point
     }
 
     private void ConnectRooms(ref Dungeon dungeon, ref MapGeneratorRules generationRules)
@@ -101,6 +103,21 @@ public class DungeonGenerator : MonoBehaviour
         {
             int y = Mathf.RoundToInt(Mathf.Lerp(roomStartCell.pos.y, roomEndCell.pos.y, i / ((float)yDistance)));
             dungeon.Add(new Cell() { tileType = TileType.Ground, pos = new Vector2Int(roomEndCell.pos.x, y) });
+        }
+    }
+
+    private void SetTilesNeighbours(ref Dungeon dungeon)
+    {
+        foreach (Cell cell in dungeon)
+        {
+            var neighbours = dungeon.Cells.Cast<Cell>().Where((cell) => {
+                return (cell.GetDungeonPosition().x == cell.pos.x + 1 && cell.GetDungeonPosition().y == cell.pos.y)
+                    || (cell.GetDungeonPosition().x == cell.pos.x - 1 && cell.GetDungeonPosition().y == cell.pos.y)
+                    || (cell.GetDungeonPosition().y == cell.pos.y + 1 && cell.GetDungeonPosition().x == cell.pos.x)
+                    || (cell.GetDungeonPosition().y == cell.pos.y - 1 && cell.GetDungeonPosition().x == cell.pos.x);
+            });
+
+            cell.SetNeighbours(neighbours);
         }
     }
 }

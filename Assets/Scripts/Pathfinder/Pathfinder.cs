@@ -26,26 +26,6 @@ public class Pathfinder : MonoBehaviour
         return FormatPath(pathNode);
     }
 
-    private IEnumerable<IWalkable> FormatPath(PathNode pathNode)
-    {
-        // Loop from target to start and store it inside a list
-        var path = new List<IWalkable>();
-
-        if (pathNode == null) return path;
-
-        while (pathNode.PreviousNode != null)
-        {
-            path.Add(pathNode.Walkable);
-
-            pathNode = pathNode.PreviousNode;
-        }
-
-        // Reverse it to have the start at the begining of the list
-        path.Reverse();
-
-        return path;
-    }
-
     private PathNode FindPath(IWalkable endNode, PathNode optimalNode = null)
     {
         if (optimalNode?.Walkable == endNode || priorityQueue.IsEmpty)
@@ -80,6 +60,26 @@ public class Pathfinder : MonoBehaviour
             if (showGlobalDebug) print("Reach end node");
             return currentNode;
         }
+    }
+
+    private IEnumerable<IWalkable> FormatPath(PathNode pathNode)
+    {
+        // Loop from target to start and store it inside a list
+        var path = new List<IWalkable>();
+
+        if (pathNode == null) return path;
+
+        while (pathNode.PreviousNode != null)
+        {
+            path.Add(pathNode.Walkable);
+
+            pathNode = pathNode.PreviousNode;
+        }
+
+        // Reverse it to have the start at the begining of the list
+        path.Reverse();
+
+        return path;
     }
 
     public void SetFirstNode(IWalkable start)
