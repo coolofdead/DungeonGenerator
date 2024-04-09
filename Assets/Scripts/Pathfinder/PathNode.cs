@@ -1,7 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 public class PathNode
 {
@@ -13,18 +12,23 @@ public class PathNode
     /// </summary>
     public int PathValue { get; private set; }
 
-    public IEnumerable<PathNode> GetTileNeighbours(PathNode previousNode)
-    {
-        foreach (IWalkable neighbourWalkable in Walkable.GetNeighbours())
-        {
-            yield return new PathNode(neighbourWalkable, previousNode, previousNode.PathValue + 1);
-        }
-    }
-
     public PathNode (IWalkable walkable = null, PathNode previousNode = null, int pathValue = 0)
     {
         Walkable = walkable;
         PreviousNode = previousNode;
         PathValue = pathValue;
+    }
+
+    public IEnumerable<PathNode> GetTileNeighbours()
+    {
+        foreach (IWalkable neighbourWalkable in Walkable.GetNeighbours())
+        {
+            yield return new PathNode(neighbourWalkable, this, PathValue + 1);
+        }
+    }
+
+    public float GetTotalCost()
+    {
+        return PathValue;
     }
 }

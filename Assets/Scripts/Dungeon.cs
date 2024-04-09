@@ -12,18 +12,32 @@ public class Dungeon : IDungeon
     public IEnumerable<ICellable> GetCells() => Cells;
     public Vector2Int GetSize() => MapSize;
 
-    public Dungeon(Vector2Int mapSize)
+    public Dungeon(DungeonSizeType sizeType)
     {
-        MapSize = mapSize;
+        MapSize = Vector2Int.one * (int)sizeType;
         Cells = new();
         Rooms = new();
     }
 
     public Cell this[int index] { get => Cells[index]; set => Cells[index] = value; }
 
-    public void Add(Cell newCell)
+    public void AddCells(IEnumerable<ICellable> cells)
     {
-        if (!Cells.Any(cell => cell.pos.x == newCell.pos.x && cell.pos.y == newCell.pos.y)) Cells.Add(newCell);
+        foreach (var cell in cells)
+        {
+            Add(cell);
+        }
+    }
+
+    public void Add(ICellable newCell)
+    {
+        if (Cells.Any(cell => cell.GetDungeonPosition().x == newCell.GetDungeonPosition().x && cell.GetDungeonPosition().y == newCell.GetDungeonPosition().y))
+        {
+            Debug.Log($"Try to add duplicate cell at position {newCell.GetDungeonPosition()}");
+            return;
+        }
+
+        Cells.Add((Cell)newCell);
     }
 
     public void Add(Room room)
@@ -37,12 +51,12 @@ public class Dungeon : IDungeon
 
     public bool HasAt(int x, int y)
     {
-        return Cells.Any(cell => cell.pos.x == x && cell.pos.y == y);
+        return Cells.Any(cell => cell.GetDungeonPosition().x == x && cell.GetDungeonPosition().y == y);
     }
 
-    public Cell TryGet(int x, int y)
+    public ICellable TryGet(int x, int y)
     {
-        return Cells.Where(cell => cell.pos.x == x && cell.pos.y == y).First();
+        return Cells.Where(cell => cell.GetDungeonPosition().x == x && cell.GetDungeonPosition().y == y).First();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -58,7 +72,7 @@ public class Cell : ICellable, IWalkable
 {
     public TileType tileType;
     public Vector2Int pos;
-    public IEnumerable<IWalkable> Neighbours;
+    private IEnumerable<IWalkable> Neighbours;
 
     public IEnumerable<IWalkable> GetNeighbours() => Neighbours;
     public void SetNeighbours(IEnumerable<IWalkable> neighbours) => Neighbours = neighbours;
@@ -71,10 +85,29 @@ public class Cell : ICellable, IWalkable
 public class Room
 {
     public List<Cell> cells;
+    public readonly int width;
+    public readonly int length;
 
     public Room(int width, int length)
     {
+        this.width = width;
+        this.length = length;
         cells = Enumerable.Repeat(new Cell(), width * length).ToList();
+    }
+
+    public void AddCells(Vector2Int roomCoordonate)
+    {
+        for (int h = 0; h < length; h++)
+        {
+            for (int w = 0; w < width; w++)
+            {
+                cells[w + h * width] = new Cell()
+                {
+                    tileType = TileType.Ground,
+                    pos = new Vector2Int(roomCoordonate.x + w - width / 2, roomCoordonate.y + h - length / 2),
+                };
+            }
+        }
     }
 }
 

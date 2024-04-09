@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
+    [Header("Dungeon Debug")]
+    public DungeonData DungeonData;
+
     [Header("Map Config")]
     [SerializeField, RequireInterface(typeof(IDungeonGenerable))] private Object dungeonGenerator;
     public IDungeonGenerable DungeonGenerator => dungeonGenerator as IDungeonGenerable;
-    [SerializeField, RequireInterface(typeof(IDungeonRulabe))] private List<Object> dungeonGeneratorRules;
-    public IEnumerable<IDungeonRulabe> DungeonGeneratorRules => dungeonGeneratorRules as IEnumerable<IDungeonRulabe>;
+    //[SerializeField, RequireInterface(typeof(IDungeonRulabe))] private List<Object> dungeonGeneratorRules;
+    //public IEnumerable<IDungeonRulabe> DungeonGeneratorRules => dungeonGeneratorRules as IEnumerable<IDungeonRulabe>;
 
     [Header("Visual Dungeon")]
     [SerializeField] private Transform mapAnchor;
@@ -19,7 +22,7 @@ public class MapManager : MonoBehaviour
     public void Start()
     {
         // Generate map
-        Dungeon = (Dungeon)DungeonGenerator.GenerateDungeon(DungeonGeneratorRules);
+        Dungeon = (Dungeon)DungeonGenerator.GenerateDungeon(DungeonData);
 
         GenerateWorldMap();
     }

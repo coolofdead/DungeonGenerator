@@ -16,11 +16,11 @@ public class EntityPathManager : MonoBehaviour
             var startCell = MapManager.Dungeon[Random.Range(0, MapManager.Dungeon.Cells.Count)];
             var endCell = MapManager.Dungeon[Random.Range(0, MapManager.Dungeon.Cells.Count)];
 
-            //print($"from {startCell.GetPosition()}");
-            //print($"to {endCell.GetPosition()}");
+            print($"from {startCell.GetPosition()}");
+            print($"to {endCell.GetPosition()}");
             var path = Pathfinder.FindPath(startCell, endCell);
 
-            //print(path.Count());
+            print(path.Count());
             StartCoroutine(MoveAlongPath(movableAlongPath, path));
         }
     }

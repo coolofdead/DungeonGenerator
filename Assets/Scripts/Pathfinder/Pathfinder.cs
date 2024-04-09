@@ -1,14 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// BETTER TO USE ASYNC / AWAIT + COROUTINE FOR MAKING PATH AND USING MORE REF AND STRUCT TO REDUCE MEMORY COST
+
 public class Pathfinder : MonoBehaviour
 {
-    public delegate void OnPathUpdate(IWalkable currentWalkable, List<IWalkable> visitedWalkables, List<PathNode> walkablesToVisit);
-    public OnPathUpdate onPathUpdate;
-
     private PriorityQueue priorityQueue;
-    private List<IWalkable> visitedTile = new();
+    private HashSet<IWalkable> visitedTiles = new();
 
     [SerializeField] private bool showGlobalDebug = false;
     [SerializeField] private bool showCurrentNode = false;
@@ -18,7 +19,7 @@ public class Pathfinder : MonoBehaviour
     public IEnumerable<IWalkable> FindPath(IWalkable start, IWalkable target)
     {
         priorityQueue = new PriorityQueue();
-        visitedTile.Clear();
+        visitedTiles.Clear();
 
         SetFirstNode(start);
         PathNode pathNode = FindPath(target);
@@ -26,57 +27,47 @@ public class Pathfinder : MonoBehaviour
         return FormatPath(pathNode);
     }
 
-    private PathNode FindPath(IWalkable endNode, PathNode optimalNode = null)
+    private PathNode FindPath(IWalkable endNode)
     {
-        if (optimalNode?.Walkable == endNode || priorityQueue.IsEmpty)
+        while (!priorityQueue.IsEmpty)
         {
-            return optimalNode;
-        }
+            PathNode currentNode = priorityQueue.GetBestNode();
 
-        PathNode currentNode = priorityQueue.GetBestNode();
-        if (showCurrentNode) print("Current node is " + currentNode.Walkable);
-
-        if (currentNode.Walkable != endNode)
-        {
-            visitedTile.Add(currentNode.Walkable);
-
-            if (showVisited) print("Visited " + visitedTile.Count);
-
-            foreach (PathNode pathNode in currentNode.GetTileNeighbours(currentNode))
+            if (currentNode.Walkable == endNode)
             {
-                if (!visitedTile.Contains(pathNode.Walkable)) priorityQueue.AddPathNodeIfNotAlready(pathNode); ;
+                if (showGlobalDebug) Debug.Log("Reach end node");
+                return currentNode;
             }
 
-            if (showQueue) print("Queue " + priorityQueue.Nodes.Count);
+            if (showCurrentNode) Debug.Log("Current node is " + currentNode.Walkable);
 
-            onPathUpdate?.Invoke(currentNode.Walkable, visitedTile, priorityQueue.Nodes);
+            visitedTiles.Add(currentNode.Walkable);
 
-            optimalNode = FindPath(endNode, optimalNode);
+            foreach (PathNode pathNode in currentNode.GetTileNeighbours())
+            {
+                if (!visitedTiles.Contains(pathNode.Walkable))
+                {
+                    priorityQueue.AddPathNode(pathNode);
+                }
+            }
 
-            return optimalNode;
+            if (showVisited) Debug.Log("Visited " + visitedTiles.Count);
+            if (showQueue) Debug.Log("Queue " + priorityQueue.Count);
         }
-        else
-        {
-            if (showGlobalDebug) print("Reach end node");
-            return currentNode;
-        }
+
+        return null; // No path found
     }
 
     private IEnumerable<IWalkable> FormatPath(PathNode pathNode)
     {
-        // Loop from target to start and store it inside a list
         var path = new List<IWalkable>();
-
-        if (pathNode == null) return path;
 
         while (pathNode.PreviousNode != null)
         {
             path.Add(pathNode.Walkable);
-
             pathNode = pathNode.PreviousNode;
         }
 
-        // Reverse it to have the start at the begining of the list
         path.Reverse();
 
         return path;
@@ -85,6 +76,6 @@ public class Pathfinder : MonoBehaviour
     public void SetFirstNode(IWalkable start)
     {
         var startNode = new PathNode(start);
-        priorityQueue.AddPathNodeIfNotAlready(startNode);
+        priorityQueue.AddPathNode(startNode);
     }
 }

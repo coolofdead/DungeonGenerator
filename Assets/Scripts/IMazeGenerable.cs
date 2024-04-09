@@ -4,12 +4,7 @@ using UnityEngine;
 
 public interface IDungeonGenerable
 {
-    IDungeon GenerateDungeon(IEnumerable<IDungeonRulabe> rules = null);
-}
-
-public interface IDungeonRulabe
-{
-    void ApplyRuleToDungeon(ref IDungeon dungeon);
+    IDungeon GenerateDungeon(DungeonData dungeonData); // Super wrong
 }
 
 
@@ -17,6 +12,7 @@ public interface IDungeonRulabe
 public interface IDungeon : IEnumerable
 {
     IEnumerable<ICellable> GetCells();
+    void AddCells(IEnumerable<ICellable> cells);
     Vector2Int GetSize();
 }
 

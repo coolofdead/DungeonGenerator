@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b07e606aa383c574c8d6b5594d2642d6, type: 3}
+  m_Name: Dungeon Data 1
+  m_EditorClassIdentifier: Assembly-CSharp::MapGeneratorRules
+  SizeType: 0
+  <DungeonRoomData>k__BackingField: {fileID: 11400000, guid: d7e045aadf3c8454c9e40679bf49ea64, type: 2}
+  lol: 0

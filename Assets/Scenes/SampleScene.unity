@@ -389,6 +389,9 @@ GameObject:
   - component: {fileID: 1168205158}
   - component: {fileID: 1168205162}
   - component: {fileID: 1168205165}
+  - component: {fileID: 1168205168}
+  - component: {fileID: 1168205167}
+  - component: {fileID: 1168205166}
   m_Layer: 0
   m_Name: Dungeon
   m_TagString: Untagged
@@ -423,9 +426,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b85b4df28e7a04526bf8c5cec30c2ddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DungeonData: {fileID: 11400000, guid: e156fa5a204b8aa44a1147ae7ed902df, type: 2}
   dungeonGenerator: {fileID: 1168205165}
-  dungeonGeneratorRules:
-  - {fileID: 11400000, guid: 07054327d978b6143be5b324a34189f7, type: 2}
   mapAnchor: {fileID: 1168205158}
   groundPrefab: {fileID: 1936319415136060180, guid: 96aa02a2847994b4e827610f9fd90544, type: 3}
 --- !u!114 &1168205165
@@ -441,7 +443,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showLogs: 0
-  seed: 0
+  seed: 123
+  roomGenerator: {fileID: 1168205168}
+  corridorGenerator: {fileID: 1168205167}
+  neighboursGenerator: {fileID: 1168205166}
+--- !u!114 &1168205166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168205157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa7dfbf4fb7ed3458b8fbcb80568b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showLogs: 0
+--- !u!114 &1168205167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168205157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d7db6339cd5ce40a058fa0d75a1f70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showLogs: 0
+--- !u!114 &1168205168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1168205157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cb166364b777f74fbd730deaf90bf70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showLogs: 0
 --- !u!1 &1776773775
 GameObject:
   m_ObjectHideFlags: 0

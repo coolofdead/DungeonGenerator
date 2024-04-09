@@ -2,38 +2,69 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class PriorityQueue : IEnumerable
 {
-    public List<PathNode> Nodes { get; protected set; } = new List<PathNode>();
+    public List<PathNode> Nodes { get; private set; } = new List<PathNode>();
 
+    public int Count => Nodes.Count;
     public bool IsEmpty => Nodes.Count == 0;
 
-    public PathNode this[int key]
+    public void AddPathNode(PathNode pathNode)
     {
-        get => Nodes[key];
-        set => Nodes[key] = value;
+        Nodes.Add(pathNode);
+        HeapifyUp(Nodes.Count - 1);
     }
 
     public PathNode GetBestNode()
     {
-        PathNode bestPathNode = Nodes.OrderBy(node => node.PathValue).First();
-        Nodes.Remove(bestPathNode);
+        if (IsEmpty)
+            throw new InvalidOperationException("PriorityQueue is empty");
 
-        return bestPathNode;
+        PathNode bestNode = Nodes[0];
+        Nodes[0] = Nodes[^1];
+        Nodes.RemoveAt(Nodes.Count - 1);
+        if (Nodes.Count > 1)
+            HeapifyDown(0);
+        return bestNode;
     }
 
-    public void AddPathNodeIfNotAlready(PathNode pathNode)
+    private void HeapifyUp(int index)
     {
-        for (int i = 0; i < Nodes.Count; i++)
+        int parentIndex = (index - 1) / 2;
+        while (index > 0 && Nodes[index].PathValue < Nodes[parentIndex].PathValue)
         {
-            if (Nodes[i].Walkable == pathNode.Walkable)
-            {
-                return;
-            }
+            SwapNodes(index, parentIndex);
+            index = parentIndex;
+            parentIndex = (index - 1) / 2;
         }
+    }
 
-        Nodes.Add(pathNode);
+    private void HeapifyDown(int index)
+    {
+        int leftChildIndex = 2 * index + 1;
+        int rightChildIndex = 2 * index + 2;
+        int smallest = index;
+
+        if (leftChildIndex < Nodes.Count && Nodes[leftChildIndex].PathValue < Nodes[smallest].PathValue)
+            smallest = leftChildIndex;
+
+        if (rightChildIndex < Nodes.Count && Nodes[rightChildIndex].PathValue < Nodes[smallest].PathValue)
+            smallest = rightChildIndex;
+
+        if (smallest != index)
+        {
+            SwapNodes(index, smallest);
+            HeapifyDown(smallest);
+        }
+    }
+
+    private void SwapNodes(int i, int j)
+    {
+        PathNode temp = Nodes[i];
+        Nodes[i] = Nodes[j];
+        Nodes[j] = temp;
     }
 
     public IEnumerator GetEnumerator()
