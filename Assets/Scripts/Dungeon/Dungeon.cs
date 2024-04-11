@@ -19,7 +19,8 @@ public class Dungeon : IDungeon
         Rooms = new();
     }
 
-    public Cell this[int index] { get => Cells[index]; set => Cells[index] = value; }
+    public Cell this[int index] { get => Cells[index]; }
+    public Cell this[int x, int y] { get => Cells[x + y * MapSize.y]; }
 
     public void AddCells(IEnumerable<ICellable> cells)
     {
