@@ -20,9 +20,9 @@ public class PathNode
         PathValue = pathValue;
     }
 
-    public IEnumerable<PathNode> GetTileNeighbours(IMovableAlongPath movable)
+    public IEnumerable<PathNode> GetTileNeighbours()
     {
-        foreach (IWalkable neighbourWalkable in Walkable.GetNeighbours().Where(neighbour => movable.CanWalkOn(neighbour)))
+        foreach (IWalkable neighbourWalkable in Walkable.GetNeighbours())
         {
             yield return new PathNode(neighbourWalkable, this, PathValue + 1);
         }

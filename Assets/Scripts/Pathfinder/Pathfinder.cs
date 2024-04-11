@@ -44,8 +44,10 @@ public class Pathfinder : MonoBehaviour
 
             visitedTiles.Add(currentNode.Walkable);
 
-            foreach (PathNode pathNode in currentNode.GetTileNeighbours(movable))
+            foreach (PathNode pathNode in currentNode.GetTileNeighbours())
             {
+                if (movable.CanWalkOn(pathNode.Walkable)) continue;
+
                 if (!visitedTiles.Contains(pathNode.Walkable))
                 {
                     priorityQueue.AddPathNode(pathNode);
