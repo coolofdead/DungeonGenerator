@@ -7,22 +7,21 @@ public class EntityPathManager : MonoBehaviour
 {
     public Pathfinder Pathfinder;
     public MapManager MapManager;
-    public MovableEntity movableAlongPath;
 
-    private void Update()
+    public MovableEntity movable;
+
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            var startCell = MapManager.Dungeon[Random.Range(0, MapManager.Dungeon.Cells.Count)];
-            var endCell = MapManager.Dungeon[Random.Range(0, MapManager.Dungeon.Cells.Count)];
+        Tile.onPlayerTileClicked += MoveEntitiesToTile;
+    }
 
-            print($"from {startCell.GetPosition()}");
-            print($"to {endCell.GetPosition()}");
-            var path = Pathfinder.FindPath(startCell, endCell);
+    private void MoveEntitiesToTile(Tile tileClicked)
+    {
+        var movableCell = MapManager.GetCellAt(movable.transform);
+        var tileCell = MapManager.GetCellAt(tileClicked.transform);
 
-            print(path.Count());
-            StartCoroutine(MoveAlongPath(movableAlongPath, path));
-        }
+        var path = Pathfinder.FindPath(movable, movableCell, tileCell);
+        StartCoroutine(MoveAlongPath(movable, path));
     }
 
     private IEnumerator MoveAlongPath(IMovableAlongPath movable, IEnumerable<IWalkable> path)
@@ -37,6 +36,13 @@ public class EntityPathManager : MonoBehaviour
             movable.Move(walkable.GetPosition());
 
             yield return new WaitWhile(() => !movable.HasReachPos());
+
+            walkable.OnMovableWalkOn(movable);
         }
+    }
+
+    private void OnDestroy()
+    {
+        Tile.onPlayerTileClicked -= MoveEntitiesToTile;
     }
 }

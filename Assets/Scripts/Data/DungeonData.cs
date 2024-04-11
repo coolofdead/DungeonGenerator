@@ -6,19 +6,14 @@ using UnityEngine;
 public class DungeonData : ScriptableObject
 {
     [Header("Map")]
-    // Name
-    // Icon
-    // Avg LV
+    // Name, Icon, Avg LV
     public DungeonSizeType SizeType;
-    //public Vector2Int MapSize => SizeType == MapSizeType.Small ? Vector2Int.one * MAP_SIZE_SMALL : SizeType == MapSizeType.Medium ? Vector2Int.one * MAP_SIZE_MEDIUM : Vector2Int.one * MAP_SIZE_LARGE;
 
     [field:Header("Room")]
-    // SO Rooms info (Enumerable)
     [field:SerializeField] public DungeonRoomData DungeonRoomData { get; protected set; }
 
-    [Header("Corridor")]
-    // SO Corridor
-    //public int nbCorridorCorner = 1;
+    [field:Header("Corridor")]
+    [field: SerializeField] public DungeonCorridorData DungeonCorridorData { get; protected set; }
 
     [Header("Items")]
 

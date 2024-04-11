@@ -16,4 +16,6 @@ public class DungeonRoomData : ScriptableObject
 
     public int minRoomLength = 3;
     public int maxRoomLength = 5;
+
+    // TODO : Add dummies (1x1) room
 }

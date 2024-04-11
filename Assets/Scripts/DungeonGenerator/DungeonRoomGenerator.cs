@@ -24,7 +24,7 @@ public class DungeonRoomGenerator : MonoBehaviour
             var spaceBetweenRoom = rnd.Next(roomData.minSpaceBetweenRoom, roomData.maxSpaceBetweenRoom);
             Vector2Int roomCoordonate = i == 0 ? Vector2Int.zero : GetRandomPointWithDistance(rooms, spaceBetweenRoom + (roomWidth + roomLength) / 2, rnd);
 
-            Room room = new(roomWidth, roomLength);
+            var room = new Room(roomWidth, roomLength);
             room.AddCells(roomCoordonate);
             rooms.Add(roomCoordonate);
 

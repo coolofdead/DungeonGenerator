@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class MovableEntity : MonoBehaviour, IMovableAlongPath
 {
+    public TileType TileWalkable;
+
+    public bool CanWalkOn(IWalkable walkable)
+    {
+        return TileWalkable.HasFlag(walkable.GetWalkableType());
+    }
+
     public bool HasReachPos()
     {
         return true;

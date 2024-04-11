@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
 
 public class DungeonGenerator : MonoBehaviour, IDungeonGenerable
 {
@@ -25,12 +24,18 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerable
         // Other idea to apply rules based on DungeonSO 
         //foreach (var rule in rules)
         //{
-        //    rule.ApplyRuleToDungeon(ref dungeon);
+        //    rule.ApplyRuleToDungeon(dungeon);
         //}
 
         roomGenerator.GenerateRooms(dungeon, dungeonData, rnd);
         corridorGenerator.ConnectRooms(dungeon, dungeonData, rnd);
+        // generate walls
         neighboursGenerator.SetTilesNeighbours(dungeon);
+        // generate stairs
+        // generate items
+        // generate mobs
+        // generate environement (water, lava, air..) cells
+        // find most top left and bottom right and fill with empty walls cells
         // ... add more generation layouts
 
         if (showLogs) print($"Total cells {dungeon.GetCells().Count()}");

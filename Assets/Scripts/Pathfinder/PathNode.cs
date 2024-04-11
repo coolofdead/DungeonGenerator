@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class PathNode
 {
@@ -19,9 +20,9 @@ public class PathNode
         PathValue = pathValue;
     }
 
-    public IEnumerable<PathNode> GetTileNeighbours()
+    public IEnumerable<PathNode> GetTileNeighbours(IMovableAlongPath movable)
     {
-        foreach (IWalkable neighbourWalkable in Walkable.GetNeighbours())
+        foreach (IWalkable neighbourWalkable in Walkable.GetNeighbours().Where(neighbour => movable.CanWalkOn(neighbour)))
         {
             yield return new PathNode(neighbourWalkable, this, PathValue + 1);
         }

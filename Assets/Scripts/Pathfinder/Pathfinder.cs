@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -16,18 +17,18 @@ public class Pathfinder : MonoBehaviour
     [SerializeField] private bool showQueue = false;
     [SerializeField] private bool showVisited = false;
 
-    public IEnumerable<IWalkable> FindPath(IWalkable start, IWalkable target)
+    public IEnumerable<IWalkable> FindPath(IMovableAlongPath movable, IWalkable start, IWalkable target)
     {
         priorityQueue = new PriorityQueue();
         visitedTiles.Clear();
 
         SetFirstNode(start);
-        PathNode pathNode = FindPath(target);
+        PathNode pathNode = FindPath(target, movable);
 
         return FormatPath(pathNode);
     }
 
-    private PathNode FindPath(IWalkable endNode)
+    private PathNode FindPath(IWalkable endNode, IMovableAlongPath movable)
     {
         while (!priorityQueue.IsEmpty)
         {
@@ -43,7 +44,7 @@ public class Pathfinder : MonoBehaviour
 
             visitedTiles.Add(currentNode.Walkable);
 
-            foreach (PathNode pathNode in currentNode.GetTileNeighbours())
+            foreach (PathNode pathNode in currentNode.GetTileNeighbours(movable))
             {
                 if (!visitedTiles.Contains(pathNode.Walkable))
                 {
@@ -61,6 +62,8 @@ public class Pathfinder : MonoBehaviour
     private IEnumerable<IWalkable> FormatPath(PathNode pathNode)
     {
         var path = new List<IWalkable>();
+
+        if (pathNode is null) return path;
 
         while (pathNode.PreviousNode != null)
         {

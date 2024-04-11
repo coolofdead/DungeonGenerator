@@ -54,7 +54,7 @@ public class Dungeon : IDungeon
         return Cells.Any(cell => cell.GetDungeonPosition().x == x && cell.GetDungeonPosition().y == y);
     }
 
-    public ICellable TryGet(int x, int y)
+    public ICellable GetAtPos(int x, int y)
     {
         return Cells.Where(cell => cell.GetDungeonPosition().x == x && cell.GetDungeonPosition().y == y).First();
     }
@@ -66,54 +66,4 @@ public class Dungeon : IDungeon
             yield return cell;
         }
     }
-}
-
-public class Cell : ICellable, IWalkable
-{
-    public TileType tileType;
-    public Vector2Int pos;
-    private IEnumerable<IWalkable> Neighbours;
-
-    public IEnumerable<IWalkable> GetNeighbours() => Neighbours;
-    public void SetNeighbours(IEnumerable<IWalkable> neighbours) => Neighbours = neighbours;
-
-    public Vector2Int GetDungeonPosition() => pos;
-    public Vector3 GetPosition() => GetWorldPosition();
-    public Vector3 GetWorldPosition() => new Vector3(pos.x, 0, pos.y);
-}
-
-public class Room
-{
-    public List<Cell> cells;
-    public readonly int width;
-    public readonly int length;
-
-    public Room(int width, int length)
-    {
-        this.width = width;
-        this.length = length;
-        cells = Enumerable.Repeat(new Cell(), width * length).ToList();
-    }
-
-    public void AddCells(Vector2Int roomCoordonate)
-    {
-        for (int h = 0; h < length; h++)
-        {
-            for (int w = 0; w < width; w++)
-            {
-                cells[w + h * width] = new Cell()
-                {
-                    tileType = TileType.Ground,
-                    pos = new Vector2Int(roomCoordonate.x + w - width / 2, roomCoordonate.y + h - length / 2),
-                };
-            }
-        }
-    }
-}
-
-public enum TileType
-{
-    None,
-    Wall,
-    Ground,
 }
