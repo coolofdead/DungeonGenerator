@@ -611,6 +611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d4d7ba904c5c4b5c921c61594ebcd6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showLogs: 0
   Pathfinder: {fileID: 1776773777}
   MapManager: {fileID: 1168205162}
   movable: {fileID: 3509780578082183606}
