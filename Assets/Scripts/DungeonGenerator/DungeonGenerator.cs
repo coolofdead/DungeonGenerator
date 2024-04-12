@@ -11,6 +11,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerable
     public DungeonRoomGenerator roomGenerator;
     public DungeonCorridorGenerator corridorGenerator;
     public DungeonNeighboursGenerator neighboursGenerator;
+    public DungeonWallGenerator dungeonWallGenerator;
 
     private System.Random rnd;
 
@@ -29,12 +30,12 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerable
 
         roomGenerator.GenerateRooms(dungeon, dungeonData, rnd);
         corridorGenerator.ConnectRooms(dungeon, dungeonData, rnd);
-        // generate walls
+        dungeonWallGenerator.GenerateWalls(dungeon);
         neighboursGenerator.SetTilesNeighbours(dungeon);
         // generate stairs
         // generate items
         // generate mobs
-        // generate environement (water, lava, air..) cells
+        // generate environement (water, lava, air..) cellsx
         // find most top left and bottom right and fill with empty walls cells
         // ... add more generation layouts
 

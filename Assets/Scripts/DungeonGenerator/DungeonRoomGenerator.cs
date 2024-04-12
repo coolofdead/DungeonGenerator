@@ -15,10 +15,12 @@ public class DungeonRoomGenerator : MonoBehaviour
         if (showLogs) print($"Total room generated {totalRooms}");
 
         var rooms = new List<Vector2Int>();
-        for (int i = 0; i < totalRooms; i++)
+        for (int i = 0; i < totalRooms + roomData.dummiesToMake; i++)
         {
-            var roomWidth = rnd.Next(roomData.minRoomWidth, roomData.maxRoomWidth);
-            var roomLength = rnd.Next(roomData.minRoomLength, roomData.maxRoomLength);
+            var isDummyRoom = i >= totalRooms; // Dummies are just empty 1x1 room
+
+            var roomWidth = isDummyRoom ? 1 : rnd.Next(roomData.minRoomWidth, roomData.maxRoomWidth);
+            var roomLength = isDummyRoom ? 1 : rnd.Next(roomData.minRoomLength, roomData.maxRoomLength);
             if (showLogs) print($"room {i} width {roomWidth} room length {roomLength}");
 
             var spaceBetweenRoom = rnd.Next(roomData.minSpaceBetweenRoom, roomData.maxSpaceBetweenRoom);

@@ -50,6 +50,11 @@ public class Dungeon : IDungeon
         }
     }
 
+    public bool HasAt(Vector2Int pos)
+    {
+        return HasAt(pos.x, pos.y);
+    }
+
     public bool HasAt(int x, int y)
     {
         return Cells.Any(cell => cell.GetDungeonPosition().x == x && cell.GetDungeonPosition().y == y);

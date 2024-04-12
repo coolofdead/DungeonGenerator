@@ -8,4 +8,5 @@ public interface IWalkable
     IEnumerable<IWalkable> GetNeighbours();
     bool CanBeWalkedOn();
     void OnMovableWalkOn(IMovableAlongPath movable);
+    void OnMovableWalkOff(IMovableAlongPath movable);
 }

@@ -8,6 +8,7 @@ public class Room
     public List<Cell> cells;
     public readonly int width;
     public readonly int length;
+    public Vector2Int RoomCoordonate { get; private set; }
 
     public Room(int width, int length)
     {
@@ -18,6 +19,8 @@ public class Room
 
     public void AddCells(Vector2Int roomCoordonate)
     {
+        RoomCoordonate = roomCoordonate;
+
         for (int h = 0; h < length; h++)
         {
             for (int w = 0; w < width; w++)
@@ -29,5 +32,15 @@ public class Room
                 });
             }
         }
+    }
+
+    public IEnumerable<Cell> GetEdges()
+    {
+        var mostRightPos = RoomCoordonate.x - width / 2;
+        var mostLeftPos = RoomCoordonate.x + width / 2;
+        var mostTopPos = RoomCoordonate.y - length / 2;
+        var mostBottomPos = RoomCoordonate.y + length / 2;
+
+        return cells.Where(cell => cell.GetDungeonPosition().x == mostRightPos || cell.GetDungeonPosition().x == mostLeftPos || cell.GetDungeonPosition().y == mostTopPos || cell.GetDungeonPosition().y == mostBottomPos);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DungeonCorridorGenerator : MonoBehaviour
 {
@@ -10,32 +11,41 @@ public class DungeonCorridorGenerator : MonoBehaviour
 
     public void ConnectRooms(Dungeon dungeon, DungeonData dungeonData, System.Random rnd)
     {
+        var corridorData = dungeonData.DungeonCorridorData;
+
         foreach (Room room in dungeon.Rooms)
         {
             var connectedRoom = dungeon.Rooms.Where(r => !r.Equals(room)).OrderBy(_ => rnd.Next()).First();
-            var fromRoom = room.cells.OrderBy(_ => rnd.Next()).First();
-            var toRoom = connectedRoom.cells.OrderBy(_ => rnd.Next()).First();
+
+            var fromRoom = room.GetEdges().OrderBy(_ => rnd.Next()).First();
+            var toRoom = connectedRoom.GetEdges().OrderBy(_ => rnd.Next()).First();
 
             if (showLogs) print($"connecting room {fromRoom.GetDungeonPosition()} with {toRoom.GetDungeonPosition()}");
 
-            ConnectRoomToRoom(dungeon, fromRoom, toRoom);
+            ConnectRoomToRoom(dungeon, corridorData, fromRoom, toRoom, rnd);
         }
     }
 
-    private void ConnectRoomToRoom(Dungeon dungeon, Cell roomStartCell, Cell roomEndCell)
+    private void ConnectRoomToRoom(Dungeon dungeon, DungeonCorridorData corridorData, Cell roomStartCell, Cell roomEndCell, System.Random rnd)
     {
-        var xDistance = Math.Abs(roomEndCell.pos.x - roomStartCell.pos.x);
-        for (int i = 0; i < xDistance; i++)
-        {
-            int x = Mathf.RoundToInt(Mathf.Lerp(roomStartCell.pos.x, roomEndCell.pos.x, i / ((float)xDistance)));
-            dungeon.Add(new Cell() { tileType = TileType.Ground, pos = new Vector2Int(x, roomStartCell.pos.y) });
-        }
+        var dir = roomEndCell.pos - roomStartCell.pos;
+        var pathPos = roomStartCell.pos;
+        var moveOnX = rnd.Next(0, 100) > 50;
+        //var nbCorridorCorner = corridorData.nbCorridorCorner;
+        var changeDirAtMagnitude = rnd.Next(2, (int)dir.magnitude - 2);
 
-        var yDistance = Math.Abs(roomEndCell.pos.y - roomStartCell.pos.y);
-        for (int i = 0; i < yDistance; i++)
+        while (dir.magnitude > 1)
         {
-            int y = Mathf.RoundToInt(Mathf.Lerp(roomStartCell.pos.y, roomEndCell.pos.y, i / ((float)yDistance)));
-            dungeon.Add(new Cell() { tileType = TileType.Ground, pos = new Vector2Int(roomEndCell.pos.x, y) });
+            var moveDirClamped = (moveOnX ? Vector2Int.right * dir : Vector2Int.up * dir);
+            moveDirClamped.Clamp(-Vector2Int.one, Vector2Int.one);
+
+            pathPos += moveDirClamped;
+            dir = roomEndCell.pos - pathPos;
+            dungeon.Add(new Cell() { tileType = TileType.Ground, pos = pathPos });
+
+            moveOnX = (!moveOnX && dir.y == 0) || (moveOnX && dir.x != 0);
+            moveOnX = changeDirAtMagnitude == 0 || changeDirAtMagnitude == -1 ? !moveOnX : moveOnX; // Make it change dir at least twice during the path creation
+            changeDirAtMagnitude--; // Make it change dir at least twice during the path creation
         }
     }
 }

@@ -19,12 +19,16 @@ public class Cell : ICellable, IWalkable
 
     public bool CanBeWalkedOn()
     {
-        return ObjectOnCell == null;
+        return true;
     }
 
     public void OnMovableWalkOn(IMovableAlongPath movable) 
     {
         ObjectOnCell = movable;
+    }
+
+    public void OnMovableWalkOff(IMovableAlongPath movable)
+    {
     }
 
     public TileType GetWalkableType()

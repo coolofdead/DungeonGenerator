@@ -46,7 +46,7 @@ public class Pathfinder : MonoBehaviour
 
             foreach (PathNode pathNode in currentNode.GetTileNeighbours())
             {
-                if (movable.CanWalkOn(pathNode.Walkable)) continue;
+                if (!pathNode.Walkable.CanBeWalkedOn() || !movable.CanWalkOn(pathNode.Walkable)) continue;
 
                 if (!visitedTiles.Contains(pathNode.Walkable))
                 {

@@ -15,6 +15,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Transform mapAnchor;
     [SerializeField] private Tile groundPrefab;
     [SerializeField] private Tile waterPrefab;
+    [SerializeField] private Tile wallPrefab;
 
     public Dungeon Dungeon { get; private set; }
 
@@ -36,8 +37,14 @@ public class MapManager : MonoBehaviour
                 case TileType.Ground:
                     tilePrefab = groundPrefab;
                     break;
-                default:
+                case TileType.Water:
                     tilePrefab = waterPrefab;
+                    break;
+                case TileType.Wall:
+                    tilePrefab = wallPrefab;
+                    break;
+                default:
+                    tilePrefab = groundPrefab;
                     break;
             }
             Tile newCell = Instantiate(tilePrefab, mapAnchor);
