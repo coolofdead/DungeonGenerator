@@ -3,18 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface 
-
-public interface ICarriable
-{
-    void Carry();
-}
-
 public class Cell : ICellable, IWalkable
 {
-    public TileType tileType;
-    public ItemType Item;
-    public Vector2Int pos;
+    public readonly TileType tileType;
+    public readonly Vector2Int pos;
+    public ICarriable carriable;
+    public bool HasStair;
+
     public IMovableAlongPath WalkbaleOnCell { get; private set; }
     private IEnumerable<IWalkable> Neighbours;
 
@@ -25,9 +20,10 @@ public class Cell : ICellable, IWalkable
     public Vector3 GetPosition() => GetWorldPosition();
     public Vector3 GetWorldPosition() => new Vector3(pos.x, 0, pos.y);
 
-    public Cell()
+    public Cell(Vector2Int pos, TileType tileType, ICarriable carriable = null)
     {
-
+        this.pos = pos;
+        this.tileType = tileType;
     }
 
     public bool CanBeWalkedOn()
@@ -38,6 +34,12 @@ public class Cell : ICellable, IWalkable
     public void OnMovableWalkOn(IMovableAlongPath movable) 
     {
         WalkbaleOnCell = movable;
+
+        if (carriable != null && movable is ICarrier)
+        {
+            (movable as ICarrier)?.Carry(carriable);
+            carriable = null;
+        }
     }
 
     public void OnMovableWalkOff(IMovableAlongPath movable)
@@ -51,7 +53,7 @@ public class Cell : ICellable, IWalkable
     }
 }
 
-[System.Flags]
+[Flags]
 public enum TileType
 {
     None = 0,
@@ -60,5 +62,4 @@ public enum TileType
     Lava = 2,
     Water = 4,
     Air = 8,
-    Stairs = Ground,
 }

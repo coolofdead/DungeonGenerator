@@ -16,6 +16,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Tile groundPrefab;
     [SerializeField] private Tile waterPrefab;
     [SerializeField] private Tile wallPrefab;
+    [SerializeField] private Tile stairPrefab;
 
     public Dungeon Dungeon { get; private set; }
 
@@ -47,6 +48,8 @@ public class MapManager : MonoBehaviour
                     tilePrefab = groundPrefab;
                     break;
             }
+            if (cell.HasStair) tilePrefab = stairPrefab;
+
             Tile newCell = Instantiate(tilePrefab, mapAnchor);
             newCell.transform.position = new Vector3(cell.pos.x, 0, cell.pos.y);
         }

@@ -21,7 +21,7 @@ public class DungeonWallGenerator : MonoBehaviour
                 if (isCell) continue;
 
                 nbWallsCreated++; // Only for debug
-                dungeon.Add(new Cell() { tileType = TileType.Wall, pos = cell.GetDungeonPosition() + direction });
+                dungeon.Add(new Cell(cell.GetDungeonPosition() + direction, TileType.Wall));
             }
         }
 

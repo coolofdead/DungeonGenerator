@@ -12,6 +12,7 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerable
     public DungeonCorridorGenerator corridorGenerator;
     public DungeonNeighboursGenerator neighboursGenerator;
     public DungeonWallGenerator dungeonWallGenerator;
+    public DungeonStairGenerator dungeonStairGenerator;
 
     private System.Random rnd;
 
@@ -31,8 +32,8 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerable
         roomGenerator.GenerateRooms(dungeon, dungeonData, rnd);
         corridorGenerator.ConnectRooms(dungeon, dungeonData, rnd);
         dungeonWallGenerator.GenerateWalls(dungeon);
+        dungeonStairGenerator.GenerateStair(dungeon, rnd);
         neighboursGenerator.SetTilesNeighbours(dungeon);
-        // generate stairs
         // generate items
         // generate mobs
         // generate environement (water, lava, air..) cellsx

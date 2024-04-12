@@ -25,11 +25,9 @@ public class Room
         {
             for (int w = 0; w < width; w++)
             {
-                cells.Add(new Cell()
-                {
-                    tileType = Random.Range(0, 100) > 50 ? TileType.Ground : TileType.Water, // TODO : Remove, used only for testing
-                    pos = new Vector2Int(roomCoordonate.x + w - width / 2, roomCoordonate.y + h - length / 2),
-                });
+                var pos = new Vector2Int(roomCoordonate.x + w - width / 2, roomCoordonate.y + h - length / 2);
+                var tileType = Random.Range(0, 100) > 50 ? TileType.Ground : TileType.Water; // TODO : Remove, used only for testing
+                cells.Add(new Cell(pos, tileType));
             }
         }
     }

@@ -41,7 +41,7 @@ public class DungeonCorridorGenerator : MonoBehaviour
 
             pathPos += moveDirClamped;
             dir = roomEndCell.pos - pathPos;
-            dungeon.Add(new Cell() { tileType = TileType.Ground, pos = pathPos });
+            dungeon.Add(new Cell(pathPos, TileType.Ground));
 
             moveOnX = (!moveOnX && dir.y == 0) || (moveOnX && dir.x != 0);
             moveOnX = changeDirAtMagnitude == 0 || changeDirAtMagnitude == -1 ? !moveOnX : moveOnX; // Make it change dir at least twice during the path creation
