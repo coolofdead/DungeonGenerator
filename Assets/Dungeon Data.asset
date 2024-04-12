@@ -10,9 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b07e606aa383c574c8d6b5594d2642d6, type: 3}
-  m_Name: Dungeon Data 1
+  m_Name: Dungeon Data
   m_EditorClassIdentifier: Assembly-CSharp::MapGeneratorRules
   SizeType: 15
+  TotalFloor: 5
   <DungeonRoomData>k__BackingField: {fileID: 11400000, guid: d7e045aadf3c8454c9e40679bf49ea64, type: 2}
   <DungeonCorridorData>k__BackingField: {fileID: 11400000, guid: 7965366fcf9a3d749aab1874e703df9f, type: 2}
+  <DungeonItemData>k__BackingField: {fileID: 11400000, guid: 5cd4809a4dcc5ee46bbdef7708c331f7, type: 2}
   lol: 0

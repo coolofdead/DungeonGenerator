@@ -9,11 +9,11 @@ public class DungeonStairGenerator : MonoBehaviour
 
     public void GenerateStair(Dungeon dungeon, System.Random rnd)
     {
-        var stairRoom = dungeon.Rooms[rnd.Next(0, dungeon.Rooms.Count - 1)];
+        var stairRoom = dungeon.Rooms.Where(room => !room.isDummyRoom).OrderBy(_ => rnd.Next()).First();
         var roomCellEdges = stairRoom.GetEdges(); // Buffer
         var availableCells = stairRoom.cells.Where(cell => !roomCellEdges.Contains(cell));
 
-        var stairCell = availableCells.ElementAt(rnd.Next(0, availableCells.Count() - 1));
+        var stairCell = availableCells.ElementAt(rnd.Next(0, availableCells.Count()));
         stairCell.HasStair = true;
     }
 }

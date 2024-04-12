@@ -34,7 +34,7 @@ public class Dungeon : IDungeon
     {
         if (Cells.Any(cell => cell.GetDungeonPosition().x == newCell.GetDungeonPosition().x && cell.GetDungeonPosition().y == newCell.GetDungeonPosition().y))
         {
-            Debug.Log($"Try to add duplicate cell at position {newCell.GetDungeonPosition()}");
+            //Debug.Log($"Try to add duplicate cell at position {newCell.GetDungeonPosition()}");
             return;
         }
 

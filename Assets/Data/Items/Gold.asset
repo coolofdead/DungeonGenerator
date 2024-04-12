@@ -16,6 +16,6 @@ MonoBehaviour:
   rarity: 0
   name: Gold
   desc: Money of the game
-  sprite: {fileID: 0}
+  sprite: {fileID: 811430902, guid: 3134e3c0ef000ab44bdd1de91c45b148, type: 3}
   prefab: {fileID: 0}
   price: 0

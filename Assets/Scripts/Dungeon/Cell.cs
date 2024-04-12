@@ -5,10 +5,13 @@ using UnityEngine;
 
 public class Cell : ICellable, IWalkable
 {
+    public static Action<IMovableAlongPath> onMovableWalkOnStair;
+
     public readonly TileType tileType;
     public readonly Vector2Int pos;
     public ICarriable carriable;
     public bool HasStair;
+    public readonly bool isImmutable;
 
     public IMovableAlongPath WalkbaleOnCell { get; private set; }
     private IEnumerable<IWalkable> Neighbours;
@@ -20,10 +23,12 @@ public class Cell : ICellable, IWalkable
     public Vector3 GetPosition() => GetWorldPosition();
     public Vector3 GetWorldPosition() => new Vector3(pos.x, 0, pos.y);
 
-    public Cell(Vector2Int pos, TileType tileType, ICarriable carriable = null)
+    public Cell(Vector2Int pos, TileType tileType, ICarriable carriable = null, bool isImmutable = false)
     {
         this.pos = pos;
         this.tileType = tileType;
+        this.carriable = carriable;
+        this.isImmutable = isImmutable;
     }
 
     public bool CanBeWalkedOn()
@@ -31,7 +36,7 @@ public class Cell : ICellable, IWalkable
         return WalkbaleOnCell == null;
     }
 
-    public void OnMovableWalkOn(IMovableAlongPath movable) 
+    public void OnMovableWalkOn(IMovableAlongPath movable)
     {
         WalkbaleOnCell = movable;
 
@@ -39,6 +44,11 @@ public class Cell : ICellable, IWalkable
         {
             (movable as ICarrier)?.Carry(carriable);
             carriable = null;
+        }
+        
+        if (HasStair)
+        {
+            onMovableWalkOnStair?.Invoke(movable);
         }
     }
 

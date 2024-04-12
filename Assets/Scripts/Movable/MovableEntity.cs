@@ -1,12 +1,17 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class MovableEntity : MonoBehaviour, IMovableAlongPath, ICarrier
 {
-    public TileType TileWalkable;
+    public const float MOVE_SPEED = 0.12f;
 
+    public TileType TileWalkable;
     public Inventory inventory;
+
+    private bool hasReachedPos = false;
 
     public bool CanWalkOn(IWalkable walkable)
     {
@@ -16,16 +21,17 @@ public class MovableEntity : MonoBehaviour, IMovableAlongPath, ICarrier
     public void Carry(ICarriable carriable)
     {
         inventory.Add(carriable);
+        ResourcePooler.Instance[carriable.GetCarryType()].Release((carriable as MonoBehaviour).gameObject);
     }
 
     public bool HasReachPos()
     {
-        return true;
+        return hasReachedPos;
     }
 
     public void Move(Vector3 movePos)
     {
-        //print("Move to " + movePos);
-        transform.position = movePos + Vector3.up;
+        hasReachedPos = false;
+        transform.DOMove(movePos + Vector3.up, MOVE_SPEED).OnComplete(() => hasReachedPos = true).SetEase(Ease.Linear);
     }
 }

@@ -8,6 +8,7 @@ public class DungeonData : ScriptableObject
     [Header("Map")]
     // Name, Icon, Avg LV
     public DungeonSizeType SizeType;
+    public int TotalFloor;
 
     [field:Header("Room")]
     [field:SerializeField] public DungeonRoomData DungeonRoomData { get; protected set; }
@@ -15,7 +16,8 @@ public class DungeonData : ScriptableObject
     [field:Header("Corridor")]
     [field: SerializeField] public DungeonCorridorData DungeonCorridorData { get; protected set; }
 
-    [Header("Items")]
+    [field:Header("Items")]
+    [field: SerializeField] public DungeonItemData DungeonItemData { get; protected set; }
 
     [Header("Mobs")]
 

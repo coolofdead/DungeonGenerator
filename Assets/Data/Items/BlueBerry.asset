@@ -16,6 +16,6 @@ MonoBehaviour:
   rarity: 0
   name: Blue berry
   desc: berry that can heal
-  sprite: {fileID: 0}
-  prefab: {fileID: 0}
+  sprite: {fileID: -817334798, guid: 3134e3c0ef000ab44bdd1de91c45b148, type: 3}
+  prefab: {fileID: 497041962535195803, guid: 4e5e00e24a95a3242af2608e85baab07, type: 3}
   price: 0

@@ -13,31 +13,30 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerable
     public DungeonNeighboursGenerator neighboursGenerator;
     public DungeonWallGenerator dungeonWallGenerator;
     public DungeonStairGenerator dungeonStairGenerator;
-
+    public DungeonItemGenerator dungeonItemGenerator;
+    
     private System.Random rnd;
+
+    private void Awake()
+    {
+        int seed = this.seed == 0 ? Random.Range(0, 99999) : this.seed;
+        rnd = new System.Random(seed);
+    }
 
     public IDungeon GenerateDungeon(DungeonData dungeonData)
     {
         var dungeon = new Dungeon(dungeonData.SizeType);
 
-        int seed = this.seed == 0 ? UnityEngine.Random.Range(0, 9999) : this.seed;
-        rnd = new System.Random(seed);
-
-        // Other idea to apply rules based on DungeonSO 
-        //foreach (var rule in rules)
-        //{
-        //    rule.ApplyRuleToDungeon(dungeon);
-        //}
-
         roomGenerator.GenerateRooms(dungeon, dungeonData, rnd);
         corridorGenerator.ConnectRooms(dungeon, dungeonData, rnd);
+        // generate environement (water, lava, air..) cells
+        // add dead ends
         dungeonWallGenerator.GenerateWalls(dungeon);
         dungeonStairGenerator.GenerateStair(dungeon, rnd);
         neighboursGenerator.SetTilesNeighbours(dungeon);
-        // generate items
-        // generate mobs
-        // generate environement (water, lava, air..) cellsx
+        dungeonItemGenerator.DropItems(dungeon, dungeonData);
         // find most top left and bottom right and fill with empty walls cells
+        // generate mobs
         // ... add more generation layouts
 
         if (showLogs) print($"Total cells {dungeon.GetCells().Count()}");

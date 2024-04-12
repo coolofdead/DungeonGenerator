@@ -8,17 +8,20 @@ public class Room
     public List<Cell> cells;
     public readonly int width;
     public readonly int length;
+    public readonly bool isDummyRoom;
     public Vector2Int RoomCoordonate { get; private set; }
 
-    public Room(int width, int length)
+    public Room(int width, int length, bool isDummyRoom)
     {
         this.width = width;
         this.length = length;
+        this.isDummyRoom = isDummyRoom;
         cells = new List<Cell>(width * length);
     }
 
     public void AddCells(Vector2Int roomCoordonate)
     {
+        var isDummyRoom = width * length == 1;
         RoomCoordonate = roomCoordonate;
 
         for (int h = 0; h < length; h++)
@@ -26,8 +29,8 @@ public class Room
             for (int w = 0; w < width; w++)
             {
                 var pos = new Vector2Int(roomCoordonate.x + w - width / 2, roomCoordonate.y + h - length / 2);
-                var tileType = Random.Range(0, 100) > 50 ? TileType.Ground : TileType.Water; // TODO : Remove, used only for testing
-                cells.Add(new Cell(pos, tileType));
+                var tileType = TileType.Ground;
+                cells.Add(new Cell(pos, tileType, isImmutable: isDummyRoom));
             }
         }
     }

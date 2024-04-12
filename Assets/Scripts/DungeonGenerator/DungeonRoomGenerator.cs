@@ -11,7 +11,7 @@ public class DungeonRoomGenerator : MonoBehaviour
     {
         var roomData = dungeonData.DungeonRoomData;
 
-        var totalRooms = rnd.Next(roomData.minRoom, roomData.maxRoom);
+        var totalRooms = rnd.Next(roomData.minRoom, roomData.maxRoom+1);
         if (showLogs) print($"Total room generated {totalRooms}");
 
         var rooms = new List<Vector2Int>();
@@ -19,14 +19,14 @@ public class DungeonRoomGenerator : MonoBehaviour
         {
             var isDummyRoom = i >= totalRooms; // Dummies are just empty 1x1 room
 
-            var roomWidth = isDummyRoom ? 1 : rnd.Next(roomData.minRoomWidth, roomData.maxRoomWidth);
-            var roomLength = isDummyRoom ? 1 : rnd.Next(roomData.minRoomLength, roomData.maxRoomLength);
+            var roomWidth = isDummyRoom ? 1 : rnd.Next(roomData.minRoomWidth, roomData.maxRoomWidth+1);
+            var roomLength = isDummyRoom ? 1 : rnd.Next(roomData.minRoomLength, roomData.maxRoomLength+1);
             if (showLogs) print($"room {i} width {roomWidth} room length {roomLength}");
 
-            var spaceBetweenRoom = rnd.Next(roomData.minSpaceBetweenRoom, roomData.maxSpaceBetweenRoom);
+            var spaceBetweenRoom = rnd.Next(roomData.minSpaceBetweenRoom, roomData.maxSpaceBetweenRoom+1);
             Vector2Int roomCoordonate = i == 0 ? Vector2Int.zero : GetRandomPointWithDistance(rooms, spaceBetweenRoom + (roomWidth + roomLength) / 2, rnd);
 
-            var room = new Room(roomWidth, roomLength);
+            var room = new Room(roomWidth, roomLength, isDummyRoom);
             room.AddCells(roomCoordonate);
             rooms.Add(roomCoordonate);
 
@@ -37,7 +37,7 @@ public class DungeonRoomGenerator : MonoBehaviour
     private Vector2Int GetRandomPointWithDistance(IEnumerable<Vector2Int> cellsPlaced, int distance, System.Random rnd)
     {
         // Choix aleatoire d'un point dans la liste
-        var randomPoint = cellsPlaced.ElementAt(rnd.Next(0, cellsPlaced.Count() - 1));
+        var randomPoint = cellsPlaced.ElementAt(rnd.Next(0, cellsPlaced.Count()));
         var randomDir = new Vector2((float)((rnd.NextDouble() * 2.0) - 1.0), (float)((rnd.NextDouble() * 2.0) - 1.0));
 
         Vector2Int newPoint = Vector2Int.RoundToInt(randomPoint + distance * randomDir);

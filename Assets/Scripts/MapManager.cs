@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    [Header("Dungeon Debug")]
-    public DungeonData DungeonData;
-
-    [Header("Map Config")]
-    [SerializeField, RequireInterface(typeof(IDungeonGenerable))] private Object dungeonGenerator;
-    public IDungeonGenerable DungeonGenerator => dungeonGenerator as IDungeonGenerable;
+    public DungeonManager dungeonManager;
 
     [Header("Visual Dungeon")]
     [SerializeField] private Transform mapAnchor;
@@ -18,19 +13,9 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Tile wallPrefab;
     [SerializeField] private Tile stairPrefab;
 
-    public Dungeon Dungeon { get; private set; }
-
-    public void Start()
+    public void GenerateWorldMap(Dungeon dungeon)
     {
-        // Generate map
-        Dungeon = (Dungeon)DungeonGenerator.GenerateDungeon(DungeonData);
-
-        GenerateWorldMap();
-    }
-
-    public void GenerateWorldMap()
-    {
-        foreach (Cell cell in Dungeon)
+        foreach (Cell cell in dungeon)
         {
             Tile tilePrefab = null;
             switch (cell.GetWalkableType())
@@ -55,9 +40,17 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    public void ClearWorldMap()
+    {
+        foreach (Transform child in mapAnchor)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
     public Cell GetCellAt(Transform objectTransform)
     {
         var pos = Vector3Int.FloorToInt(objectTransform.transform.position);
-        return (Cell)Dungeon.GetAtPos(pos.x, pos.z);
+        return (Cell)dungeonManager.Dungeon.GetAtPos(pos.x, pos.z);
     }
 }
