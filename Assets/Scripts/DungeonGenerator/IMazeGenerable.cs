@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IDungeonGenerable
 {
-    IDungeon GenerateDungeon(DungeonData dungeonData); // Super wrong
+    IDungeon GenerateDungeon(DungeonData dungeonData, int floor); // Super wrong
 }
 

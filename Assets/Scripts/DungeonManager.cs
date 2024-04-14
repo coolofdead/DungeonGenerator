@@ -51,7 +51,7 @@ public class DungeonManager : MonoBehaviour
 
     public void Generate()
     {
-        Dungeon = (Dungeon)dungeonGenerator.GenerateDungeon(DungeonData);
+        Dungeon = (Dungeon)dungeonGenerator.GenerateDungeon(DungeonData, CurrentFloor);
         mapManager.GenerateWorldMap(Dungeon);
 
         player.transform.position = Vector3.up;

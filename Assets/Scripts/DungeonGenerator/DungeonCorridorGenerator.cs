@@ -9,10 +9,8 @@ public class DungeonCorridorGenerator : MonoBehaviour
 {
     public bool showLogs;
 
-    public void ConnectRooms(Dungeon dungeon, DungeonData dungeonData, System.Random rnd)
+    public void ConnectRooms(Dungeon dungeon, DungeonCorridorData corridorData, System.Random rnd)
     {
-        var corridorData = dungeonData.DungeonCorridorData;
-
         foreach (Room room in dungeon.Rooms)
         {
             var connectedRoom = dungeon.Rooms.Where(r => !r.Equals(room)).OrderBy(_ => rnd.Next()).First();

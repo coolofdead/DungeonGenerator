@@ -14,7 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapGeneratorRules
   SizeType: 15
   TotalFloor: 5
-  <DungeonRoomData>k__BackingField: {fileID: 11400000, guid: d7e045aadf3c8454c9e40679bf49ea64, type: 2}
-  <DungeonCorridorData>k__BackingField: {fileID: 11400000, guid: 7965366fcf9a3d749aab1874e703df9f, type: 2}
-  <DungeonItemData>k__BackingField: {fileID: 11400000, guid: 5cd4809a4dcc5ee46bbdef7708c331f7, type: 2}
+  <RoomDataByFloor>k__BackingField:
+  - floorRange:
+      min: 1
+      max: 5
+    data: {fileID: 11400000, guid: d7e045aadf3c8454c9e40679bf49ea64, type: 2}
+  <CorridorDataByFloor>k__BackingField:
+  - floorRange:
+      min: 1
+      max: 5
+    data: {fileID: 11400000, guid: 7965366fcf9a3d749aab1874e703df9f, type: 2}
+  <ItemDataByFloor>k__BackingField:
+  - floorRange:
+      min: 1
+      max: 5
+    data: {fileID: 11400000, guid: 5cd4809a4dcc5ee46bbdef7708c331f7, type: 2}
   lol: 0

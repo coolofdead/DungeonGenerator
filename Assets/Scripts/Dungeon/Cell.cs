@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cell : ICellable, IWalkable
+public class Cell : ICellable, IWalkable, ICarrier
 {
     public static Action<IMovableAlongPath> onMovableWalkOnStair;
 
@@ -40,9 +40,10 @@ public class Cell : ICellable, IWalkable
     {
         WalkbaleOnCell = movable;
 
-        if (carriable != null && movable is ICarrier)
+        var carrier = movable as ICarrier;
+        if (carriable != null && carrier != null && carrier.CanCarry(carriable))
         {
-            (movable as ICarrier)?.Carry(carriable);
+            carrier.Carry(carriable);
             carriable = null;
         }
         
@@ -60,6 +61,16 @@ public class Cell : ICellable, IWalkable
     public TileType GetWalkableType()
     {
         return tileType;
+    }
+
+    public void Carry(ICarriable carriable)
+    {
+        this.carriable = carriable;
+    }
+
+    public bool CanCarry(ICarriable carriable)
+    {
+        return this.carriable == null;
     }
 }
 

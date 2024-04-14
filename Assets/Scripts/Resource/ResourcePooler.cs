@@ -17,6 +17,8 @@ public class ResourcePooler : MonoBehaviour
         get { return pools[resourceType]; }
     }
 
+    public T Get<T>(ItemType resourceType) => pools[resourceType].Get().GetComponent<T>();
+
     [SerializeField] protected bool collectionChecks = true; // Collection checks will throw errors if we try to release an item that is already in the pool.
 
 

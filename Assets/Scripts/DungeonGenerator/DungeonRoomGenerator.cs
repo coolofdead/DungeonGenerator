@@ -7,10 +7,8 @@ public class DungeonRoomGenerator : MonoBehaviour
 {
     public bool showLogs;
 
-    public void GenerateRooms(Dungeon dungeon, DungeonData dungeonData, System.Random rnd)
+    public void GenerateRooms(Dungeon dungeon, DungeonRoomData roomData, System.Random rnd)
     {
-        var roomData = dungeonData.DungeonRoomData;
-
         var totalRooms = rnd.Next(roomData.minRoom, roomData.maxRoom+1);
         if (showLogs) print($"Total room generated {totalRooms}");
 

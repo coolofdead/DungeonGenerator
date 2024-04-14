@@ -6,7 +6,7 @@ public class Inventory : Dictionary<ItemType, int>
 {
     public void Add(ICarriable carriable, int quantity = 1)
     {
-        if (ContainsKey(carriable.GetCarryType())) Add(carriable.GetCarryType(), 0);
+        if (!ContainsKey(carriable.GetCarryType())) Add(carriable.GetCarryType(), 0);
         this[carriable.GetCarryType()] += quantity;
     }
 

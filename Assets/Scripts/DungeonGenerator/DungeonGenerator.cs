@@ -23,18 +23,18 @@ public class DungeonGenerator : MonoBehaviour, IDungeonGenerable
         rnd = new System.Random(seed);
     }
 
-    public IDungeon GenerateDungeon(DungeonData dungeonData)
+    public IDungeon GenerateDungeon(DungeonData dungeonData, int floor)
     {
         var dungeon = new Dungeon(dungeonData.SizeType);
 
-        roomGenerator.GenerateRooms(dungeon, dungeonData, rnd);
-        corridorGenerator.ConnectRooms(dungeon, dungeonData, rnd);
+        roomGenerator.GenerateRooms(dungeon, dungeonData.DungeonRoomData(floor), rnd);
+        corridorGenerator.ConnectRooms(dungeon, dungeonData.DungeonCorridorData(floor), rnd);
         // generate environement (water, lava, air..) cells
         // add dead ends
         dungeonWallGenerator.GenerateWalls(dungeon);
         dungeonStairGenerator.GenerateStair(dungeon, rnd);
         neighboursGenerator.SetTilesNeighbours(dungeon);
-        dungeonItemGenerator.DropItems(dungeon, dungeonData);
+        dungeonItemGenerator.DropItems(dungeon, dungeonData.DungeonItemData(floor), rnd);
         // find most top left and bottom right and fill with empty walls cells
         // generate mobs
         // ... add more generation layouts

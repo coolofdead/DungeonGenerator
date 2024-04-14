@@ -37,6 +37,7 @@ public class MapManager : MonoBehaviour
 
             Tile newCell = Instantiate(tilePrefab, mapAnchor);
             newCell.transform.position = new Vector3(cell.pos.x, 0, cell.pos.y);
+            if (cell.carriable != null) (cell.carriable as MonoBehaviour).transform.position = new Vector3(cell.pos.x, 1, cell.pos.y);
         }
     }
 

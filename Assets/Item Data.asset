@@ -14,10 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TotalItemToDrop:
     min: 1
-    max: 2
+    max: 3
   ItemDrops:
   - item: 2
-    floor:
-      min: 2
-      max: 6
-    dropRate: 43
+    dropRate: 70
+  - item: 1
+    dropRate: 30

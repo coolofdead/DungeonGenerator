@@ -9,9 +9,14 @@ public class MovableEntity : MonoBehaviour, IMovableAlongPath, ICarrier
     public const float MOVE_SPEED = 0.12f;
 
     public TileType TileWalkable;
-    public Inventory inventory;
+    public Inventory inventory = new();
 
     private bool hasReachedPos = false;
+
+    public bool CanCarry(ICarriable carriable)
+    {
+        return true;
+    }
 
     public bool CanWalkOn(IWalkable walkable)
     {
